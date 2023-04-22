@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="i2cpwm_board" name="i2cpwm_controller_node" type="i2cpwm_controller" output="screen" launch-prefix="sudo -E"/>
+</launch>

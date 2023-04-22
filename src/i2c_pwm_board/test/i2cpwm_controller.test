@@ -1,0 +1,6 @@
+<launch>
+  <include file="$(find i2cpwm_board)/launch/i2cpwm_node.launch"/>
+  <node pkg="i2cpwm_board" type="i2cpwm_controller_test" name="i2cpwm_controller_test" output="screen">
+    <rosparam command="load" file="$(find i2cpwm_board)/config/servos_calibration.yaml"/>
+  </node>
+</launch>
