@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import rospy
 import numpy as np
@@ -52,12 +52,12 @@ def callback(msg):
       max_pwm = 520
       center_pwm = 306
       pwm_value = angle_to_pwm(position, min_pwm, max_pwm, center_pwm)
-      servo.value = pwm_value  # 여기에서 각도를 적절한 PWM 값으로 변환해야 함
+    #   servo.value = pwm_value  # need chane angle to pwm
       if i == 0:
         rospy.loginfo(pwm_value)
-      servo_array.servos.append(servo)
+    #   servo_array.servos.append(servo)
 
-    servo_pub.publish(servo_array)
+    # servo_pub.publish(servo_array)
     publish_joint_states(joint_positions)
 
 

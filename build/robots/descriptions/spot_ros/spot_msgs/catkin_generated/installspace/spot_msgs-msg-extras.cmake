@@ -1,0 +1,2 @@
+set(spot_msgs_MESSAGE_FILES "msg/BatteryStateArray.msg;msg/BehaviorFault.msg;msg/EStopStateArray.msg;msg/FootStateArray.msg;msg/LeaseArray.msg;msg/LeaseOwner.msg;msg/Metrics.msg;msg/SystemFault.msg;msg/WiFiState.msg;msg/BatteryState.msg;msg/BehaviorFaultState.msg;msg/EStopState.msg;msg/Feedback.msg;msg/FootState.msg;msg/Lease.msg;msg/LeaseResource.msg;msg/PowerState.msg;msg/SystemFaultState.msg")
+set(spot_msgs_SERVICE_FILES "")

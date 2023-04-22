@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+	<node name="imu_filter_madgwick" pkg="imu_filter_madgwick" type="imu_filter_node" output="screen">
+		  <rosparam file="$(find spotmicro_config)/config/imu/madgwick_filter.yaml" command="load"/>
+	</node>
+
+	<node name="i2c_imu_node" pkg="i2c_imu" type="i2c_imu_node" output="screen" required="true">
+      <!-- Calibration parameters -->
+      <param name="settings_directory" type="str" value="$(find spotmicro_config)/config/imu"/>
+      <param name="settings_filename"  type="str" value="RTIMULib"/>
+
+      <rosparam file="$(find spotmicro_config)/config/imu/mpu9250.yaml" command="load"/>
+
+      <remap from="data" to="imu/data_raw"/>
+      <remap from="mag" to="imu/mag"/>
+	</node>
+
+</launch>

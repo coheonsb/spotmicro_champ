@@ -45,5 +45,6 @@
         <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_imu"   args="0 0 0 0 0 0 $(arg frame_prefix)base_link $(arg frame_prefix)imu_link" /> -->
 
         <include file="$(find spotmicro_config)/launch/position_controllers.launch"/>
+        <include file="$(find spotmicro_config)/launch/include/imu.launch" if="$(arg has_imu)"/>
     </group>
 </launch>

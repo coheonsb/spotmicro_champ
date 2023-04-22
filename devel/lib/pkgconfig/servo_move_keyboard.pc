@@ -1,0 +1,8 @@
+prefix=/home/pi/catkin_ws/devel
+
+Name: servo_move_keyboard
+Description: Description of servo_move_keyboard
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
