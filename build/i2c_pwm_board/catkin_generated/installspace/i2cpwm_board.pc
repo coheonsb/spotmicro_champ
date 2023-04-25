@@ -1,8 +1,0 @@
-prefix=/home/pi/catkin_ws/install
-
-Name: i2cpwm_board
-Description: Description of i2cpwm_board
-Version: 0.5.1
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib -li2cpwm_board
-Requires: roscpp std_msgs message_runtime

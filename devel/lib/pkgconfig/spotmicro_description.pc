@@ -1,8 +1,0 @@
-prefix=/home/pi/catkin_ws/devel
-
-Name: spotmicro_description
-Description: Description of spotmicro_description
-Version: 0.1.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

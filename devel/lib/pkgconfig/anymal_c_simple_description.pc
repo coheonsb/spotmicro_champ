@@ -1,8 +1,0 @@
-prefix=/home/pi/catkin_ws/devel
-
-Name: anymal_c_simple_description
-Description: Description of anymal_c_simple_description
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
