@@ -52,15 +52,28 @@ def callback(msg):
       max_pwm = 520
       center_pwm = 306
       pwm_value = angle_to_pwm(position, min_pwm, max_pwm, center_pwm)
+      position = 30
     #   servo.value = pwm_value  # need chane angle to pwm
-      if i == 0:
-        rospy.loginfo(pwm_value)
     #   servo_array.servos.append(servo)
 
     # servo_pub.publish(servo_array)
-    publish_joint_states(joint_positions)
+    # publish_joint_states(joint_positions)
+    # rTod
+    # degs = tuple(rTod(jr) for jr in joint_positions)
+    degs = tuple(rTod(joint_positions[0]),rTod(joint_positions[1]),rTod(joint_positions[2]),
+    rTod(joint_positions[3]),rTod(joint_positions[4]),rTod(joint_positions[5]),
+    rTod(joint_positions[6]),rTod(joint_positions[7]),rTod(joint_positions[8]),
+    rTod(joint_positions[9]),rTod(joint_positions[10]),rTod(joint_positions[11]))
+    rospy.loginfo(degs)
+    radis = tuple(dTor(jd) for jd in degs)
+    publish_joint_states(radis)
 
 
+def rTod(radians):
+    return radians * (180 / math.pi)
+
+def dTor(degrees):
+    return degrees * (math.pi / 180)
 
 def listener():
 
