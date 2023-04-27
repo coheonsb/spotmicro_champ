@@ -28,6 +28,17 @@ joint_names = [
   
 ]
 
+
+
+
+def rTod(radians, config = 0.0):
+    temp = radians * (180 / math.pi)
+    return temp + config
+
+def dTor(degrees, config = 0.0):
+    return (degrees - config) * (math.pi / 180)
+
+
 def angle_to_pwm(angle_rad, min_pwm, max_pwm, center_pwm):
     # Convert angle from radians to degrees
     angle_deg = math.degrees(angle_rad)
@@ -60,20 +71,20 @@ def callback(msg):
     # publish_joint_states(joint_positions)
     # rTod
     # degs = tuple(rTod(jr) for jr in joint_positions)
-    degs = tuple(rTod(joint_positions[0]),rTod(joint_positions[1]),rTod(joint_positions[2]),
-    rTod(joint_positions[3]),rTod(joint_positions[4]),rTod(joint_positions[5]),
-    rTod(joint_positions[6]),rTod(joint_positions[7]),rTod(joint_positions[8]),
-    rTod(joint_positions[9]),rTod(joint_positions[10]),rTod(joint_positions[11]))
+    degs = (rTod(joint_positions[0]), rTod(joint_positions[1]), rTod(joint_positions[2], 90),
+    rTod(joint_positions[3]), rTod(joint_positions[4]), rTod(joint_positions[5], 90),
+    rTod(joint_positions[6]), rTod(joint_positions[7]), rTod(joint_positions[8], 90),
+    rTod(joint_positions[9]), rTod(joint_positions[10]), rTod(joint_positions[11], 90))
     rospy.loginfo(degs)
-    radis = tuple(dTor(jd) for jd in degs)
+    # radis = tuple(dTor(jd) for jd in degs)
+    radis = (dTor(degs[0]), dTor(degs[1]), dTor(degs[2], 90),
+    dTor(degs[3]), dTor(degs[4]), dTor(degs[5], 90),
+    dTor(degs[6]), dTor(degs[7]), dTor(degs[8], 90),
+    dTor(degs[9]), dTor(degs[10]), dTor(degs[11], 90))
     publish_joint_states(radis)
 
 
-def rTod(radians):
-    return radians * (180 / math.pi)
 
-def dTor(degrees):
-    return degrees * (math.pi / 180)
 
 def listener():
 
