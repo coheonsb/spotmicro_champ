@@ -32,11 +32,11 @@ joint_names = [
 
 
 def rTod(radians, config = 0.0):
-    temp = radians * (180 / math.pi)
-    return temp + config
+    return math.degrees(radians)
 
 def dTor(degrees, config = 0.0):
-    return (degrees - config) * (math.pi / 180)
+    return math.radians(degrees)
+
 
 
 def angle_to_pwm(angle_rad, min_pwm, max_pwm, center_pwm):
@@ -71,8 +71,8 @@ def callback(msg):
     # publish_joint_states(joint_positions)
     # rTod
     # degs = tuple(rTod(jr) for jr in joint_positions)
-    degs = (rTod(joint_positions[0]+ 45), rTod(joint_positions[1]), rTod(joint_positions[2]),
-    rTod(joint_positions[3]+45), rTod(joint_positions[4]), rTod(joint_positions[5]),
+    degs = (rTod(joint_positions[0]), rTod(joint_positions[1]), rTod(joint_positions[2]),
+    rTod(joint_positions[3]), rTod(joint_positions[4]), rTod(joint_positions[5]),
     rTod(joint_positions[6]), rTod(joint_positions[7]), rTod(joint_positions[8]),
     rTod(joint_positions[9]), rTod(joint_positions[10]), rTod(joint_positions[11]))
     rospy.loginfo(degs)
@@ -84,7 +84,10 @@ def callback(msg):
     publish_joint_states(radis)
 
 
-
+config = [2.6181638120218977e-06, 64.89528704025946, -110.4209430661173,
+           -7.969308747622277e-07, 64.89528704025946, -110.4209430661173, 
+           2.6181638120218977e-06, 64.89528704025946, -110.4209430661173, 
+           -7.969308747622277e-07, 64.89528704025946, -110.4209430661173]
 
 def listener():
 

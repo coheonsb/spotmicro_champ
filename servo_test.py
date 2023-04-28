@@ -26,12 +26,12 @@ import sys
 #     kit.servo[i].set_pulse_width_range(500, 2500)
 
 config = [
-    {'id': 2, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_left_shoulder', 'min_angle': 5, 'max_angle': 175 },
-    {'id': 1,'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_left_leg', 'min_angle': 5, 'max_angle': 175 },
-    {'id': 0,'fix': 0, 'offSet': 10, 'direction': -1, 'name': 'front_left_foot', 'min_angle': 5, 'max_angle': 175 },
-    {'id': 5,'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_right_shoulder', 'min_angle': 5, 'max_angle': 175 },
-    {'id': 4,'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_right_leg', 'min_angle': 5, 'max_angle': 175 },
-    {'id': 3,'fix': 0, 'offSet': 0, 'direction': 1, 'name': 'front_right_foot', 'min_angle': 5, 'max_angle': 175 },  
+    {'id': 5, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_left_shoulder', 'min_angle': 5, 'max_angle': 175 },
+    {'id': 4,'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_left_leg', 'min_angle': 5, 'max_angle': 175 },
+    {'id': 3,'fix': 0, 'offSet': 10, 'direction': -1, 'name': 'front_left_foot', 'min_angle': 5, 'max_angle': 175 },
+    {'id': 2,'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_right_shoulder', 'min_angle': 5, 'max_angle': 175 },
+    {'id': 1,'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_right_leg', 'min_angle': 5, 'max_angle': 175 },
+    {'id': 0,'fix': 0, 'offSet': 0, 'direction': 1, 'name': 'front_right_foot', 'min_angle': 5, 'max_angle': 175 },  
     {'id': 8,'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_shoulder', 'min_angle': 5, 'max_angle': 175 },
     {'id': 7,'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'rear_left_leg', 'min_angle': 5, 'max_angle': 175 },
     {'id': 6,'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'rear_left_foot', 'min_angle': 5, 'max_angle': 175 },
