@@ -7,8 +7,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 import math
 
-from i2cpwm_board.msg import Servo, ServoArray
-
+# from i2cpwm_board.msg import Servo, ServoArray
 
 import busio
 import board
@@ -112,6 +111,5 @@ if __name__ == '__main__':
     rospy.init_node("hardware_interface_node")
     # servo_pub = rospy.Publisher("/servos_absolute", ServoArray, queue_size=1)
     # joint_state_pub = rospy.Publisher("joint_states", JointState, queue_size=1)
-    rospy.Subscriber("/joint_group_position_controller/command",
-                     JointTrajectory, callback, queue_size=1)
+    rospy.Subscriber("/joint_group_position_controller/command", JointTrajectory, callback, queue_size=1)
     rospy.spin()
