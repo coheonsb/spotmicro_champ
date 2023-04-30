@@ -83,7 +83,7 @@ def move_servo(servo_index, angle):
 def callback(msg):
     joint_positions = msg.points[0].positions
     degs = tuple(rTod(jr) for jr in joint_positions)
-    rospy.loginfo(degs)
+    # rospy.loginfo(degs)
     for i, d in enumerate(degs):
         move_servo(i, d)
     radis = tuple(dTor(jd) for jd in degs)
