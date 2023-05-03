@@ -25,18 +25,18 @@ pca.frequency = 330
 
 
 config = [
-    {'id': 0, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_left_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 1, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_left_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 2, 'fix': 180, 'offSet': 10, 'direction': 1, 'name': 'front_left_foot', 'min_angle': 5, 'max_angle': 175},
-    {'id': 3, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 4, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 5, 'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'front_right_foot', 'min_angle': 5, 'max_angle': 175},
-    {'id': 6, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 7, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 8, 'fix': 180, 'offSet': 0, 'direction': 1, 'name': 'rear_left_foot', 'min_angle': 5, 'max_angle': 175},
-    {'id': 9, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_right_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 10, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'rear_right_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 11, 'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'rear_right_foot', 'min_angle': 5, 'max_angle': 175}
+    {'id': 0, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_left_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 1, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_left_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 2, 'fix': 180, 'offSet': 10, 'direction': 1, 'name': 'front_left_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 3, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 4, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 5, 'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'front_right_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 6, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 7, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 8, 'fix': 180, 'offSet': 0, 'direction': 1, 'name': 'rear_left_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 9, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_right_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 10, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'rear_right_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 11, 'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'rear_right_foot', 'min_angle': 0, 'max_angle': 180}
 ]
 
 
@@ -74,8 +74,15 @@ def move_servo(servo_index, angle):
     fixValue = config[servo_index].get('fix')
     direction = config[servo_index].get('direction')
     offSet = config[servo_index].get('offSet')
+    min_angle = config[servo_index].get('min_angle')
+    max_angle = config[servo_index].get('max_angle')
+    
     finalAngle = fixValue + (angle * direction)
     # print(finalAngle)
+    if finalAngle < min_angle:
+        finalAngle = min_angle
+    if finalAngle > max_angle:
+        finalAngle = max_angle
     kit.servo[realId].angle = finalAngle
     return angle + offSet
 
