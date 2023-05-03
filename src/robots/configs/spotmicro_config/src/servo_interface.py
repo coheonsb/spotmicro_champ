@@ -79,12 +79,16 @@ def move_servo(servo_index, angle):
     
     finalAngle = fixValue + (angle * direction)
     # print(finalAngle)
+    diff = 0
     if finalAngle < min_angle:
+        diff = finalAngle - min_angle
         finalAngle = min_angle
     if finalAngle > max_angle:
         finalAngle = max_angle
+        diff = max_angle - finalAngle
     kit.servo[realId].angle = finalAngle
-    return angle + offSet
+    
+    return angle + diff + offSet
 
 
 def callback(msg):
