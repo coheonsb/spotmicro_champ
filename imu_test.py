@@ -1,83 +1,61 @@
-
-from std_msgs.msg import String, Header
-from sensor_msgs.msg import Imu, MagneticField
-from geometry_msgs.msg import TransformStamped
-
-import tf
-import math
-
+import numpy as np
+import os
+import sys
 import time
-
-from mpu9250_jmdev.registers import *
-from mpu9250_jmdev.mpu_9250 import MPU9250
-
-G = 9.80665
-MagFieldConversion_uT_T = 0.000001
-
-mpu = MPU9250(
-    address_ak=AK8963_ADDRESS,
-    address_mpu_master=MPU9050_ADDRESS_68,  # In 0x68 Address
-    address_mpu_slave=None,
-    bus=1,
-    gfs=GFS_1000,
-    afs=AFS_8G,
-    mfs=AK8963_BIT_16,
-    mode=AK8963_MODE_C100HZ)
+import smbus
 
 
 
+from imusensor.MPU9250 import MPU9250
+from imusensor.filters import madgwick
 
-def talker():
-    imu_msg = Imu()
+sensorfusion = madgwick.Madgwick(0.5)
 
-    mpu.configure()
-    mpu.calibrate()
-    mpu.configure()
+address = 0x68
+bus = smbus.SMBus(1)
+imu = MPU9250.MPU9250(bus, address)
+imu.begin()
 
-    # create imu msg
-    q0 = 1.0  # W
-    q1 = 0.0  # X
-    q2 = 0.0  # Y
-    q3 = 0.0  # Z
+# print('cali')
+# imu.caliberateAccelerometer()
+# print("Acceleration calib successful")
 
-    # Fill imu message
-    imu_msg = Imu()
-    imu_msg.header = Header()
-  
-    imu_msg.header.frame_id = 'imu_link'
+# imu.caliberateGyro()
+# imu.caliberateMagApprox()
+# print("Mag calib successful")
+# imu.loadCalibDataFromFile("place_your_code_here.json")
 
-    imu_msg.orientation.x = q0
-    imu_msg.orientation.y = q1
-    imu_msg.orientation.z = q2
-    imu_msg.orientation.w = q3
-    imu_msg.orientation_covariance[0] = 0.01
-    imu_msg.orientation_covariance[4] = 0.01
-    imu_msg.orientation_covariance[8] = 0.01
-
-    gx, gy, gz = mpu.readGyroscopeMaster()
-    imu_msg.angular_velocity.x = math.radians(gx)
-    imu_msg.angular_velocity.y = math.radians(gy)
-    imu_msg.angular_velocity.z = math.radians(gz)
-    imu_msg.angular_velocity_covariance[0] = 0.03
-    imu_msg.angular_velocity_covariance[4] = 0.03
-    imu_msg.angular_velocity_covariance[8] = 0.03
-
-    ax, ay, az = mpu.readAccelerometerMaster()
-    imu_msg.linear_acceleration.x = ax*G
-    imu_msg.linear_acceleration.y = ay*G
-    imu_msg.linear_acceleration.z = az*G
-    imu_msg.linear_acceleration_covariance[0] = 10
-    imu_msg.linear_acceleration_covariance[4] = 10
-    imu_msg.linear_acceleration_covariance[8] = 10
+currTime = time.time()
+print_count = 0
 
 
-    print(imu_msg)
+def cov (array):
+    data = np.array(array)
+    # 평균 구하기
+    mean = np.mean(data)
+    # 각 샘플과 평균 간의 차이
+    diff = data - mean
+    # 공분산 행렬 계산 (1x1 크기)
+    cov_matrix = np.dot(diff, diff.T) / (len(data) - 1)
+    print(cov_matrix)
+    return cov_matrix
 
+while True:
+	imu.readSensor()
+	for i in range(10):
+		newTime = time.time()
+		dt = newTime - currTime
+		currTime = newTime
 
+		sensorfusion.updateRollPitchYaw(imu.AccelVals[0], imu.AccelVals[1], imu.AccelVals[2], imu.GyroVals[0],
+                                  imu.GyroVals[1], imu.GyroVals[2], imu.MagVals[0], imu.MagVals[1], imu.MagVals[2], dt)
 
+	if print_count == 2:
+		print(sensorfusion.q)
+		print(cov(sensorfusion.q))
+		print("mad roll: {0} ; mad pitch : {1} ; mad yaw : {2}".format(
+			sensorfusion.roll, sensorfusion.pitch, sensorfusion.yaw))
+		print_count = 0
 
-
-if __name__ == '__main__':
-    talker()
-    # broadcaster()
-
+	print_count = print_count + 1
+	time.sleep(0.01)
