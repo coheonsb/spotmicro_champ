@@ -26,17 +26,17 @@ pca.frequency = 330
 
 config = [
     {'id': 0, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_left_shoulder', 'min_angle': 0, 'max_angle': 180},
-    {'id': 1, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'front_left_leg', 'min_angle': 0, 'max_angle': 180},
-    {'id': 2, 'fix': 180, 'offSet': 10, 'direction': 1, 'name': 'front_left_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 1, 'fix': 90, 'offSet': -3, 'direction': 1, 'name': 'front_left_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 2, 'fix': 180, 'offSet': 6, 'direction': 1, 'name': 'front_left_foot', 'min_angle': 0, 'max_angle': 180},
     {'id': 3, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_shoulder', 'min_angle': 0, 'max_angle': 180},
-    {'id': 4, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_leg', 'min_angle': 0, 'max_angle': 180},
-    {'id': 5, 'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'front_right_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 4, 'fix': 90, 'offSet': -3, 'direction': -1, 'name': 'front_right_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 5, 'fix': 0, 'offSet': -5, 'direction': -1, 'name': 'front_right_foot', 'min_angle': 0, 'max_angle': 180},
     {'id': 6, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_shoulder', 'min_angle': 0, 'max_angle': 180},
-    {'id': 7, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 7, 'fix': 90, 'offSet': 4, 'direction': 1, 'name': 'rear_left_leg', 'min_angle': 0, 'max_angle': 180},
     {'id': 8, 'fix': 180, 'offSet': 0, 'direction': 1, 'name': 'rear_left_foot', 'min_angle': 0, 'max_angle': 180},
-    {'id': 9, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_right_shoulder', 'min_angle': 0, 'max_angle': 180},
-    {'id': 10, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'rear_right_leg', 'min_angle': 0, 'max_angle': 180},
-    {'id': 11, 'fix': 0, 'offSet': 0, 'direction': -1, 'name': 'rear_right_foot', 'min_angle': 0, 'max_angle': 180}
+    {'id': 9, 'fix': 90, 'offSet': 8, 'direction': 1, 'name': 'rear_right_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 10, 'fix': 90, 'offSet': -1, 'direction': -1, 'name': 'rear_right_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 11, 'fix': 0, 'offSet': -10, 'direction': -1, 'name': 'rear_right_foot', 'min_angle': 0, 'max_angle': 180}
 ]
 
 

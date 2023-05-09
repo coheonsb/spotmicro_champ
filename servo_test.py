@@ -24,30 +24,18 @@ pca.frequency = 330
 for i in range(12):
     kit.servo[i].set_pulse_width_range(500, 2500)
 config = [
-    {'id': 0, 'fix': 90, 'offSet': 0, 'direction': -1,
-        'name': 'front_left_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 1, 'fix': 90, 'offSet': 0, 'direction': 1,
-        'name': 'front_left_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 2, 'fix': 180, 'offSet': 10, 'direction': 1,
-        'name': 'front_left_foot', 'min_angle': 5, 'max_angle': 175},
-    {'id': 3, 'fix': 90, 'offSet': 0, 'direction': -1,
-        'name': 'front_right_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 4, 'fix': 90, 'offSet': 0, 'direction': -1,
-        'name': 'front_right_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 5, 'fix': 0, 'offSet': 0, 'direction': -1,
-        'name': 'front_right_foot', 'min_angle': 5, 'max_angle': 175},
-    {'id': 6, 'fix': 90, 'offSet': 0, 'direction': 1,
-        'name': 'rear_left_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 7, 'fix': 90, 'offSet': 0, 'direction': 1,
-        'name': 'rear_left_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 8, 'fix': 180, 'offSet': 0, 'direction': 1,
-        'name': 'rear_left_foot', 'min_angle': 5, 'max_angle': 175},
-    {'id': 9, 'fix': 90, 'offSet': 0, 'direction': 1,
-        'name': 'rear_right_shoulder', 'min_angle': 5, 'max_angle': 175},
-    {'id': 10, 'fix': 90, 'offSet': 0, 'direction': -1,
-        'name': 'rear_right_leg', 'min_angle': 5, 'max_angle': 175},
-    {'id': 11, 'fix': 0, 'offSet': 0, 'direction': -1,
-        'name': 'rear_right_foot', 'min_angle': 5, 'max_angle': 175}
+    {'id': 0, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_left_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 1, 'fix': 90, 'offSet': -3, 'direction': 1, 'name': 'front_left_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 2, 'fix': 180, 'offSet': 6, 'direction': 1, 'name': 'front_left_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 3, 'fix': 90, 'offSet': 0, 'direction': -1, 'name': 'front_right_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 4, 'fix': 90, 'offSet': -3, 'direction': -1, 'name': 'front_right_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 5, 'fix': 0, 'offSet': -5, 'direction': -1, 'name': 'front_right_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 6, 'fix': 90, 'offSet': 0, 'direction': 1, 'name': 'rear_left_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 7, 'fix': 90, 'offSet': 4, 'direction': 1, 'name': 'rear_left_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 8, 'fix': 180, 'offSet': 0, 'direction': 1, 'name': 'rear_left_foot', 'min_angle': 0, 'max_angle': 180},
+    {'id': 9, 'fix': 90, 'offSet': 8, 'direction': 1, 'name': 'rear_right_shoulder', 'min_angle': 0, 'max_angle': 180},
+    {'id': 10, 'fix': 90, 'offSet': -1, 'direction': -1, 'name': 'rear_right_leg', 'min_angle': 0, 'max_angle': 180},
+    {'id': 11, 'fix': 0, 'offSet': -10, 'direction': -1, 'name': 'rear_right_foot', 'min_angle': 0, 'max_angle': 180}
 ]
 
 
@@ -58,42 +46,44 @@ def move_servo(servo_index, angle):
     direction = config[servo_index].get('direction')
     offSet = config[servo_index].get('offSet')
 
-    finalAngle = fixValue + (angle * direction)
- 
+    min_angle = config[servo_index].get('min_angle')
+    max_angle = config[servo_index].get('max_angle')
+
+    finalAngle = fixValue + (angle * direction) + offSet
+
+    diff = 0
+    if finalAngle < min_angle:
+        diff = finalAngle - min_angle
+        finalAngle = min_angle
+    if finalAngle > max_angle:
+        finalAngle = max_angle
+        diff = max_angle - finalAngle
+
     print(finalAngle)
     kit.servo[realId].angle = finalAngle
-    kit.servo[realId].set_pulse_width_range(500, 2500)
-    return angle + offSet
+
+    print(angle + diff)
+    return 
 
 
 
-move_servo(0, 0)
-move_servo(1, 0)
-move_servo(2, 0)
+# move_servo(0, 0)
+# move_servo(1, -0)
+# move_servo(2, -0)
 
 
-move_servo(3, 0)
-move_servo(4, 0)
-move_servo(5, 0)
+# move_servo(3, -0)
+# move_servo(4, -0)
+# move_servo(5, -0)
 
 
-move_servo(6, 0)
-move_servo(7, 0)
-move_servo(8, 0)
+# move_servo(6, 0)
+# move_servo(7, 0)
+move_servo(8, -10)
 
 
-move_servo(9, 0)
-move_servo(10, 0)
-move_servo(11, 0)
+# move_servo(9, 0)
+# move_servo(10, 0)
+# move_servo(11, -0)
 
 
-
-# def move_all_servos(angles):
-#     for i in range(len(angles)):
-#         kit.servo[i].angle = angles[i]
-
-
-# angles = [0, 90, 45, 135, 180, 90, 45, 90, 135, 180, 0, 90]
-# move_all_servos(angles)
-
-# time.sleep(1)
