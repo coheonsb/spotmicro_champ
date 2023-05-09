@@ -1,17 +1,25 @@
 import rospy
-from std_msgs.msg import Header
-from sensor_msgs.msg import Imu
+from std_msgs.msg import String, Header
+from sensor_msgs.msg import Imu, MagneticField
+from geometry_msgs.msg import TransformStamped
+
+
+import tf
+import math
+
+import os
+import sys
+import time
+import smbus
 
 import numpy as np
-import busio
-import board
-import adafruit_bno055
 
 
-i2c = busio.I2C(board.SCL, board.SDA)
+from imusensor.MPU9250 import MPU9250
+from imusensor.filters import madgwick
 
-sensor = adafruit_bno055.BNO055_I2C(i2c)
 
+G = 9.80665
 
 
 def covariance(array):
@@ -26,52 +34,73 @@ def talker():
     rospy.init_node('talker', anonymous=True)
     rate = rospy.Rate(10)  # 10hz
 
+    imu_msg = Imu()
+
+
+    sensorfusion = madgwick.Madgwick(0.5)
+
+    address = 0x68
+    bus = smbus.SMBus(1)
+    imu = MPU9250.MPU9250(bus, address)
+    imu.begin()
+
+    # print('cali')
+    # imu.caliberateAccelerometer()
+    # print("Acceleration calib successful")
+
+    # imu.caliberateGyro()
+    # imu.caliberateMagApprox()
+    # print("Mag calib successful")
+    # imu.loadCalibDataFromFile("place_your_code_here.json")
+
+
 
     rospy.loginfo("IMU STARTED")
- 
+    currTime = time.time()
     while not rospy.is_shutdown():
+        imu.readSensor()
+        for i in range(10):
+            newTime = time.time()
+            dt = newTime - currTime
+            currTime = newTime
+            sensorfusion.updateRollPitchYaw(imu.AccelVals[0], imu.AccelVals[1], imu.AccelVals[2], imu.GyroVals[0],
+                                    imu.GyroVals[1], imu.GyroVals[2], imu.MagVals[0], imu.MagVals[1], imu.MagVals[2], dt)
 
-        try:
-            imu_msg = Imu()
-            imu_msg.header = Header()
-            imu_msg.header.stamp = rospy.Time.now()
-            imu_msg.header.frame_id = 'imu_link'
+        imu_msg = Imu()
+        imu_msg.header = Header()
+        imu_msg.header.stamp = rospy.Time.now()
+        imu_msg.header.frame_id = 'imu_link'
 
-            imu_msg.orientation.x = float(sensor.quaternion[0])
-            imu_msg.orientation.y = float(sensor.quaternion[1])
-            imu_msg.orientation.z = float(sensor.quaternion[2])
-            imu_msg.orientation.w = float(sensor.quaternion[3])
+        imu_msg.orientation.x = sensorfusion.q[0]
+        imu_msg.orientation.y = sensorfusion.q[1]
+        imu_msg.orientation.z = sensorfusion.q[2]
+        imu_msg.orientation.w = sensorfusion.q[3]
 
-            ori_cov = covariance(
-                [float(sensor.quaternion[0]), float(sensor.quaternion[1]),
-                float(sensor.quaternion[2]), float(sensor.quaternion[3])]
-            )
+        ori_cov = covariance(sensorfusion.q)
 
-            imu_msg.orientation_covariance[0] = ori_cov
-            imu_msg.orientation_covariance[4] = ori_cov
-            imu_msg.orientation_covariance[8] = ori_cov
+        imu_msg.orientation_covariance[0] = ori_cov
+        imu_msg.orientation_covariance[4] = ori_cov
+        imu_msg.orientation_covariance[8] = ori_cov
 
-            gyro_cov = covariance([float(sensor.gyro[0]), float(
-                sensor.gyro[1]), float(sensor.gyro[2])])
-            imu_msg.angular_velocity.x = float(sensor.gyro[0])
-            imu_msg.angular_velocity.y = float(sensor.gyro[1])
-            imu_msg.angular_velocity.z = float(sensor.gyro[2])
-            imu_msg.angular_velocity_covariance[0] = gyro_cov
-            imu_msg.angular_velocity_covariance[4] = gyro_cov
-            imu_msg.angular_velocity_covariance[8] = gyro_cov
+        gyro_cov = covariance([math.radians(imu.GyroVals[0]), math.radians(
+            imu.GyroVals[1]), math.radians(imu.GyroVals[2])])
+        imu_msg.angular_velocity.x = math.radians(imu.GyroVals[0])
+        imu_msg.angular_velocity.y = math.radians(imu.GyroVals[1])
+        imu_msg.angular_velocity.z = math.radians(imu.GyroVals[2])
+        imu_msg.angular_velocity_covariance[0] = gyro_cov
+        imu_msg.angular_velocity_covariance[4] = gyro_cov
+        imu_msg.angular_velocity_covariance[8] = gyro_cov
 
-            acc_cov = covariance([float(sensor.acceleration[0]), float(
-                sensor.acceleration[1]), float(sensor.acceleration[2])])
-            imu_msg.linear_acceleration.x = float(sensor.acceleration[0])
-            imu_msg.linear_acceleration.y = float(sensor.acceleration[1])
-            imu_msg.linear_acceleration.z = float(sensor.acceleration[2])
-            imu_msg.linear_acceleration_covariance[0] = acc_cov
-            imu_msg.linear_acceleration_covariance[4] = acc_cov
-            imu_msg.linear_acceleration_covariance[8] = acc_cov
+        acc_cov = covariance(
+            [imu.AccelVals[0]*G, imu.AccelVals[1]*G, imu.AccelVals[2]*G])
+        imu_msg.linear_acceleration.x = imu.AccelVals[0]*G
+        imu_msg.linear_acceleration.y = imu.AccelVals[1]*G
+        imu_msg.linear_acceleration.z = imu.AccelVals[2]*G
+        imu_msg.linear_acceleration_covariance[0] = acc_cov
+        imu_msg.linear_acceleration_covariance[4] = acc_cov
+        imu_msg.linear_acceleration_covariance[8] = acc_cov
 
-        except Exception:
-            pass
-        print(imu_msg)
+        # print(imu_msg)
         imu_pub_champ.publish(imu_msg)
         rate.sleep()
 

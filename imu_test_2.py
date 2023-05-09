@@ -29,11 +29,11 @@ while True:
         "Temperature: {} degrees C".format(temperature())
     )  # Uncomment if using a Raspberry Pi
     """
-    print("Accelerometer (m/s^2): {}".format(sensor.acceleration))
+    print("Accelerometer (m/s^2): {}".format(sensor.acceleration[0]))
     print("Magnetometer (microteslas): {}".format(sensor.magnetic))
-    print("Gyroscope (rad/sec): {}".format(sensor.gyro))
+    print("Gyroscope (rad/sec): {}".format(sensor.gyro[0]))
     print("Euler angle: {}".format(sensor.euler))
-    print("Quaternion: {}".format(sensor.quaternion))
+    print("Quaternion: {}".format(sensor.quaternion[1]))
     print("Linear acceleration (m/s^2): {}".format(sensor.linear_acceleration))
     print("Gravity (m/s^2): {}".format(sensor.gravity))
     print()
